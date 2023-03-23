@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model appointment {
+  id        String   @id
+  startsAt  DateTime
+  endsAt    DateTime
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updateAt  DateTime @default(now())
+
+  customer   customer? @relation(fields: [customerId], references: [id])
+  customerId String?
+}
+
+model customer {
+  id          String        @id
+  username    String        @default("")
+  password    String        @default("")
+  name        String
+  phone       String
+  appointment appointment[]
+}
